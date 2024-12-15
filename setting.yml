@@ -1,0 +1,18 @@
+adapters: 
+  - http
+debug: false
+enableVerify: true
+verifyKey: INITKEYBemaL4HO
+singleMode: false
+cacheSize: 4096
+persistenceFactory: 'built-in'
+adapterSettings:
+  http:
+    host: 192.168.0.2
+    port: 8080
+    cors: ["*"]
+    unreadQueueMaxSize: 100
+  ws:
+    host: 192.168.0.2
+    port: 8080
+    reservedSyncId: -1
