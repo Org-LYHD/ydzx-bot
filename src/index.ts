@@ -102,9 +102,10 @@ type DevApiResponse =
 
 async function msgSaver(conn: DatabaseConnection, msg: MessageType.GroupMessage, logger: any)
 {
-    let sqlCmd = `INSERT INTO [ydzx].[dbo].[message] VALUES (${msg.messageChain[0].time}, ${msg.messageChain[0].id}, '${msg.sender.id}', '${msg.sender.memberName}', NULL, '${JSON.stringify(msg.messageChain.slice(1))}', 0)`
+    let sqlCmd = `INSERT INTO [ydzx].[dbo].[message] VALUES (${Math.floor(Date.now() / 1000)}, ${msg.messageChain[0].id}, '${msg.sender.id}', '${msg.sender.memberName}', NULL, '${JSON.stringify(msg.messageChain.slice(1))}', 0)`
+    //                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 此处本应从GroupMessage对象获取时间戳，但目前Overflow提供的对象时间有问题，因此改为获取系统时间。
     await conn.exec(sqlCmd)
-        .then(() => logger.info(`成功向数据库中写入了了ID为 ${msg.messageChain[0].id} 的消息记录，对象：${JSON.stringify(msg)}`))
+        .then(() => logger.info(`成功向数据库中写入了了ID为 ${msg.messageChain[0].id} 的消息记录`))
         .catch(err =>
         {
             logger.error(`在向数据库写入ID为 ${msg.messageChain[0].id} 的消息记录时出错`)
